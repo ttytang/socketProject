@@ -1,0 +1,8 @@
+[Unit]
+Description=My Forward Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/home/tang/socketProject/forwardserver.py
+Restart=on-failure
