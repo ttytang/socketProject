@@ -109,6 +109,5 @@ if __name__ == "__main__":
         if (receiver.stream_buffer):
             f.write(receiver.stream_buffer.pop(0))
     f.close()
-    receiver.close_session(receiver.sock)
     receiver.reset()
 

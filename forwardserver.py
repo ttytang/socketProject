@@ -88,7 +88,6 @@ if __name__ == "__main__":
                 sender.send_msg(sender_sock, receiver.stream_buffer.pop(0))
         sender.send_tailer(sender_sock)
         sender.close_session(sender_sock)
-        receiver.close_session(receiver_sock)
         receiver.reset()
         print('session write complete!(8')
 
