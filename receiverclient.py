@@ -49,7 +49,7 @@ class ReceiverClient:
                     if (msg_header == self.tailer):
                         self.close_session(sock)
                         self.session_size = session_size
-                        print("receive file size is %d" % session_size - 100)
+                        print("receive file size is %d" % (session_size - 100))
                         self.burst_num = burst_num
                         self.stream_num = stream_num
                         self.tailer_flag = True

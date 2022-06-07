@@ -61,7 +61,8 @@ if __name__ == "__main__":
     fpath = sys.argv[1]
     print(fpath)
     f = open(fpath, 'rb')
-    filename = fpath.encode('utf-8')+(100-len(fpath))*b'-'
+    filename=fpath.split('/')[-1]
+    filename = filename.encode('utf-8')+(100-len(filename))*b'-'
     sender.send_msg(sender.sock, filename)
     datastream = f.read(10240)
     while (datastream != b''):
