@@ -49,7 +49,7 @@ class ReceiverClient:
                     if (msg_header == self.tailer):
                         self.close_session(sock)
                         self.session_size = session_size
-                        print("receive session size %d" % session_size)
+                        print("receive file size is %d" % session_size - 100)
                         self.burst_num = burst_num
                         self.stream_num = stream_num
                         self.tailer_flag = True
@@ -106,6 +106,25 @@ class ReceiverClient:
                 self.stream_num = stream_num
                 self.tailer_flag = True
 
+# if __name__ == "__main__":
+    # receiver = ReceiverClient()
+    # receiver.connect_server('47.108.64.28', 9998)
+    # #receiver.connect_server()
+    # receiver.send_starter(receiver.sock)
+    # #create a thread to receive stream
+    # t = threading.Thread(target=receiver.receive_burst, args=(receiver.sock,))
+    # t.start()
+    # fpath = r'./forward_data.csv'
+    # f = open(fpath, 'wb')
+    # #while(receiver.stream_buffer or not receiver.stream_num):
+    # while(receiver.stream_buffer or not receiver.tailer_flag):
+        # if (receiver.stream_buffer):
+            # f.write(receiver.stream_buffer.pop(0))
+    # f.close()
+    # receiver.reset()
+
+
+### receive the file name in the stream    
 if __name__ == "__main__":
     receiver = ReceiverClient()
     receiver.connect_server('47.108.64.28', 9998)
@@ -114,12 +133,25 @@ if __name__ == "__main__":
     #create a thread to receive stream
     t = threading.Thread(target=receiver.receive_burst, args=(receiver.sock,))
     t.start()
-    fpath = r'./forward_data.csv'
-    f = open(fpath, 'wb')
+    # fpath = r'./forward_data.csv'
+    # f = open(fpath, 'wb')
     #while(receiver.stream_buffer or not receiver.stream_num):
+    head_seg = b''
+    got_filename = False
     while(receiver.stream_buffer or not receiver.tailer_flag):
         if (receiver.stream_buffer):
-            f.write(receiver.stream_buffer.pop(0))
+            one_seg = receiver.stream_buffer.pop(0)
+            if (not got_filename):
+                head_seg += one_seg
+                if(len(head_seg)<=100):
+                    continue
+                else:
+                    fpath = head_seg[:100].decode('utf-8').split('-')[0]
+                    f = open(fpath, 'wb')
+                    f.write(head_seg[100:])
+                    got_filename = True
+            else:
+                f.write(one_seg)
     f.close()
     receiver.reset()
 
