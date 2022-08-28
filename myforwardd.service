@@ -4,5 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/home/tang/socketProject/forwardserver.py
+ExecStart=/home/tang/socketProject/forwardserver.py color INFO
+StandardOutput=append:/var/log/mfs.log
+StandardError=append:/var/log/mfs.log
 Restart=on-failure
