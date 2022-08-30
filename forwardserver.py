@@ -167,7 +167,7 @@ class SenderServer(senderclient.SenderClient):
 
     def listening(self, link_num=5):
         self.sock.listen(link_num)
-
+    
     def connection_ready(self):
         while(True):
             sock, addr = self.sock.accept()
